@@ -1,0 +1,936 @@
+
+########### common_proto_both.sproto #############
+
+#
+# 协议：客户端 服务端 共用
+#
+
+.package {
+	type 0 : integer
+	session 1 : integer
+}
+
+
+.object_attribute {
+	name 0 : string 			#-- 道具属性名字
+	value 1 : string 			#-- 道具属性值
+}
+
+##道具
+.player_asset {
+	asset_type 0 : string 				#-- 资产类型
+	asset_value 1 : string 				#-- 资产数量(不可叠加的物品，此项为道具的object_id)
+	attribute 2 : *object_attribute 	#-- 属性列表
+}
+
+#奖杯状态
+.million_cup_data{
+	issue 0 : integer 	#期号
+	bonus 1 : integer 	#奖金
+}
+
+
+#卡券数据结构
+.ticket_data{
+	id 0 : integer 	#卡券id
+	type 1 : string 	#卡券类型
+	num 2 : integer 	#卡券数量
+	valid_time 3 : string 	#有效期
+	data 4 : integer(2) 	#卡券折扣
+}
+
+
+
+.glory_data {
+	level 0 : integer
+	score 1 : integer
+}
+
+
+# 系统参考量的数据结构
+.variant_data {
+	variant_name 0 : string           # 参考量的名字
+	variant_value_type 1 : string     # 参考量的表现形式，是table 还是 value型
+	variant_type 2 : string           # 每个值的类型
+	variant_value 3 : string          # 值
+}
+
+
+
+########### task_proto_both.sproto #############
+
+#
+# 协议：客户端 服务端 共用
+#
+
+.award_data {
+	asset_type 0 : string
+	asset_value 1 : integer
+}
+
+.award_data2 {
+	asset_type 0 : string
+	asset_value 1 : integer
+	award_name 2 : string
+}
+
+.fix_award_data {
+	award_data 0 : *award_data
+}
+
+.task_item {
+	id 0 : integer
+	now_total_process 1 : string    # 当前总进度
+	now_lv 2 : integer               # 当前等级
+	now_process 3 : string          # 当前等级总进度
+	need_process 4 : string         # 当前等级需要的总进度
+	task_round 5 : integer           # 应该领取的奖励档位
+	task_type 6 : string             # 任务类型
+	task_condition_type 7 : string   # 任务的条件类型(按什么条件来加进度)
+
+	# 0-不能领取 | 1-可领取 | 2-已完成 | 3- 未启用
+	award_status 8 : integer
+
+	create_time 9 : string            # 创建时间
+	over_time 10 : string            # 过期时间
+
+	start_valid_time 11 : string          # 开始的有效时间
+	end_valid_time 12 : string            # 结束的有效时间
+
+	# 奖励领取的状态
+	award_get_status 13 : string
+
+	fix_award_data 14 : *fix_award_data    #固定奖励类型
+
+	other_data_str 15 : string             # 其他数据的string表示
+
+}
+
+.task_item_change {
+	task_id 0 : integer              # 任务id
+	task_type 1 : string             # 任务类型
+	change_type 2 : string           # 改变类型 , add 新增 delete 删除
+}
+
+
+
+########### rank_proto_both.sproto #############
+
+#
+# 协议：客户端 服务端 共用
+#
+#############################################
+.rank_type_data {
+	rank 0 : integer        # 排名
+	player_id 1 : string    # 玩家id
+	name 2 : string         # 玩家昵称
+	head_image 3 : string   # 头像
+	score 4 : string 		# 分数
+	other_data 5 : string     # 其他数据 
+}
+
+.rank_stage_data {
+	stage_id 0 : integer     #阶段id
+	player_num 1 : integer   #阶段人数
+}
+
+#############################################
+
+########### pvp_game_proto_both.sproto #############
+
+#
+# 协议：客户端 服务端 共用
+#
+
+.pvp_room_info {
+	game_id 0 : integer
+}
+
+# 玩家信息
+.pvp_player_info {
+	name 0 : string      #玩家名字
+	head_link 1 : string #玩家头像下载链接
+	seat_num 2 : integer #玩家座位号
+	sex 3 : integer 	 #1男0女  其他男
+	id 4 : string 	     #玩家id
+
+}
+
+# 未领取的段位升级奖励
+.pvp_award_store {
+    grade 0 : integer  # 大段位
+    level 1 : integer  # 小段位
+    award 2 : *player_asset # 段位提升奖励
+}
+
+########### drive_game_proto_both.sproto #############
+
+#
+# 协议：客户端 服务端 共用
+#
+
+#### -----------------------------------------------------------------------------------------------------------
+
+# 所属者的 数据结构
+.drive_owner_data {
+	owner_type 0 : integer    # 拥有者类型，-1 是系统 ，1是玩家，2是车，3是道路，4是障碍 
+	owner_id 1 : integer      # 拥有者的id , 如果是玩家，就是他的seat_num ; 是车 就是 car_no  ，是道路 就是，4是障碍 no
+	owner_pos 2 : integer     # 拥有者的位置，如果是玩家，为nil ; 是车 就是 pos  ，是道路 就是 road_id ，是障碍 road_id
+}
+
+### 其他数据的结构
+.drive_game_other_data {
+	key 0 : string
+	value 1 : string
+}
+
+# 技能 数据结构
+.drive_game_skill_data {
+	skill_id 0 : integer     # 技能id 
+	skill_tag 1 : *string    # 标签字符串。 slot_show_skill 表示 插槽技能 ; skill_buff_x 修改技能的buff x表示技能id  ; own_car_x 专属于哪个车 x是车id ; 
+	process_no 2 : integer   # 创建技能的 过程 no
+	life_value 3 : integer   # 生命周期值
+	overlay_num 4 : integer  # 技能叠加次数
+	other_data 5 : *drive_game_other_data
+}
+
+# 车的技能的 tag 标签
+.drive_game_skill_tag_data {
+	tag_name 0 : string        # car_head 车头，car_body 车身 , car_tail 车尾 ，big 大技能
+	skill_id 1 : integer
+}
+
+# buff 结构
+.drive_game_buff_data {
+	
+	buff_no 0 : integer                       # buff 唯一编号
+	buff_id 1 : integer                       # buff 类型id
+	skill_id 2 : integer                      # buff 技能的id
+	skill_owner_data 3 : drive_owner_data     # buff 技能的拥有者 结构
+
+	other_data 4 : *drive_game_other_data
+}
+
+##################################################################### 游戏主体 数据结构 ↓
+# 游戏 系统
+.driver_game_system_data {
+	skill_datas 0 : *drive_game_skill_data     # 技能
+}
+
+## 道具的数据
+.driver_game_tools_data {
+	id 0 : integer       # id
+	num 1 : integer      # 个数
+	spend_mp 2 : integer # 消耗 点数 mp
+}
+
+# 玩家信息
+.driver_game_player_info {
+	name 0 : string             #玩家名字
+	head_link 1 : string        #玩家头像下载链接
+	seat_num 2 : integer        #玩家座位号
+	sex 3 : integer 	        #1男0女  其他男
+	id 4 : string 	            #玩家id
+	car_id 5 : integer          # 车id
+	duanwei_grade 6 : integer   # 大段位
+
+	money 7 : string            # 游戏中的 金钱
+	skill_datas 8 : *drive_game_skill_data     # 玩家技能id列表
+
+	## 道具数据
+	tools_data 9 : *driver_game_tools_data
+}
+
+# 车数据结构
+.driver_game_car_data {
+	car_no 0 : integer        # 车辆唯一编号
+	id 1 : integer            # 车辆的 类型id
+    level 2 : integer 
+    star 3 : integer 
+    seat_num 4 : integer      # 座位号
+    car_id 5 : integer        # 所属于 玩家的 第几辆车
+    pos 6 : integer           # 位置
+    virtual_circle 7 : integer   # 不记圈数的圈数
+
+    hp 8 : integer            # 当前血量
+    hp_max 9 : integer        # 最大血量
+    at 10 : integer            # 攻击
+    df 11 : integer            # 防御
+    sp 12 : integer            # 速度
+    hd 13 : integer            # 护盾
+
+    skill_mp 14 : integer      # 技能释放mp
+
+    skill_datas 15 : *drive_game_skill_data     # 技能
+
+    buff_datas 16 : *drive_game_buff_data
+
+    ##skill_tags 17 : *drive_game_skill_tag_data 
+}
+
+#### 地图上的 障碍数据结构
+.drive_map_barrier {
+	owner_data 0 : drive_owner_data     # 拥有者 结构
+
+	no 1 : integer           # 唯一 编号
+	id 2 : integer           # 
+	type 3 : string          # 类型 
+	road_id 4 : integer      # 位置 （road_id）
+	
+	skill_datas 5 : *drive_game_skill_data     # 技能
+}
+
+##################################################################### 游戏主体 数据结构 ↑
+
+
+##################################################################### 地图相关 ↓
+####  具体的 地图奖励
+.drive_game_map_award_base {
+	award_type 0 : string       # 具体的奖励类型 skill   or  prop 道具
+	award_id 1 : integer        # 奖励id     
+}
+
+# 格子 奖励 的 数据
+.drive_game_map_award {
+	road_id 0 : integer                            # 格子编号
+	road_award_type 1 : string					   # 格子 大的奖励类型 
+	## road_award_create_type 2 : string              # 奖励创建类型   clear 明确的, 3_in_1 , random  
+	## award_list 3 : *drive_game_map_award_base      # 奖励列表
+
+	type_id 4 : integer                               # 类型id
+}
+
+# 道路 奖励 的 改变 数据
+.drive_road_award_data {
+	pos 0 : integer                                         # 触发 道路奖励的  车位置
+	road_id 1 : integer                                     # 道路编号
+	data_type 2 : integer                                   # 1 创建，2 死亡 , 3 发奖
+	road_award_data 3 : drive_game_map_award                # 
+}
+
+# 道路 障碍 的 改变 数据
+.drive_road_barrier_data {
+	road_id 0 : integer                                     # 道路编号
+	data_type 1 : integer                                   # 1 创建，2 死亡 
+	road_barrier_data 2 : drive_map_barrier                 # 
+	reason 3 : string                                       # 原因
+	release_skill_id 4 : integer                            # 释放的技能id
+}
+
+# 地图数据结构
+.driver_game_map_data {
+	map_id 0 : integer 
+	map_award 1 : *drive_game_map_award
+	map_barrier 2 : *drive_map_barrier
+}
+
+
+##################################################################### 地图相关 ↑
+
+# 最终数据结构
+.driver_game_end_data {
+	system_data 0 : driver_game_system_data
+	car_data 1 : *driver_game_car_data
+	players_info 2 : *driver_game_player_info
+	map_data 3 : driver_game_map_data
+
+}
+
+###################################################################################################### 过程数据 ↓
+# 游戏状态改变结构
+.driver_game_status_change_data
+{
+	status 0 : integer          # 游戏状态改变 ，1 = game_begin , 2 = round_start , 3 =  game_over
+	seat_num 1 : integer 
+	pos 2 : integer             # 车位置
+}
+# 需要玩家操作消息 数据结构（通用）
+.driver_player_op_data
+{
+	op_type     0 : integer              #操作种类  1 玩家普通操作 ，2 大油门  ，3 小油门 , 4 是选择索引(基础) ，5是选择道路，6是选择技能 , 7 是使用道具 ，8 是选择道具选项
+	seat_num 1 : integer
+	for_select_vec 2 : *integer            # 如果 op_type是 5 这里是 待选的道路 id ;如果 op_type是 6 这里是 待选的技能 id
+	op_timeout 3 : integer                 # 倒计时
+	op_mp 4 : integer                      # 操作点数，只有普通操作有
+	tool_id 5 : integer                    # 道具id , 只有 op_type 为 8 的时候才有
+}
+
+# 玩家操作信息数据结构（通用）
+.driver_player_action_data
+{	
+	op_type     0 : integer  #操作种类     1 玩家普通操作 ，2 大油门  ，3 小油门 , 4 是选择索引(基础) ，5是选择道路，6是选择技能
+	op_arg_1 1 : integer         # 操作参数  操作类型为5 时传的是 道路id , 类型为6 时传的是 技能id
+	seat_num 2 : integer  
+	op_data 3 : driver_player_op_data
+}
+# 车辆移动 obj 数据
+.driver_obj_car_move_data
+{
+	car_no		0 : integer     # 车的唯一编号
+	pos    	    1 : integer     # 触发时 车的位置
+	type        2 : string      # 移动类型， 大油门，小油门，冲刺...
+	move_nums   3 : integer     ## 正着跑是 正的，倒着跑是负的
+}
+
+# 车传送的数据
+.driver_obj_car_transfer_data {
+	car_no 0 : integer              # 哪个车
+	pos 1 : integer                 # 触发时车的位置 
+	end_pos 2 : integer             # 传送到的数量
+}
+
+
+# 编辑车辆数据 （只限于 基础属性，不含 血量的修改 ）
+.driver_obj_modify_property {
+	car_no 0 : integer               # 车的唯一编号
+	modify_key_name 1 : string       # 编辑的属性名 hp , sp ,at
+	modify_type 2 : integer          # 编辑类型  1 是 增加or减少 固定值 ; 2是  增加or减少 百分比  ;  3是  设置 固定值
+	modify_value 3 : integer         # 编辑的值
+	end_value 4 : integer            # 
+
+	modify_tag 5 : *string            # bj 暴击 (适用于hp) ; lj 连击 (适用于hp) ; miss (适用于hp)
+}
+
+## 车辆 交换
+.driver_obj_car_exchange_pos {
+	car_no 0 : integer               # 车的唯一编号
+	pos 1 : integer                  # 交换时的位置
+	end_pos 2 : integer              # 最终位置
+	exchange_car_no 3 : integer      # 交换的车的 编号
+	exchange_car_pos 4 : integer     # 交换的车的 位置
+	exchange_car_end_pos 5 : integer # 交换的车的 最终位置
+}
+
+
+# 玩家修改属性
+.driver_obj_player_modify_property {
+	seat_num 0 : integer               # 座位号
+	modify_key_name 1 : string         # 编辑的属性名
+	modify_type 2 : integer            # 编辑类型  1 是 增加or减少 固定值 ; 2是  增加or减少 百分比  ;  3是  设置 固定值
+	modify_value 3 : integer           # 编辑的值
+	end_value 4 : integer       
+}
+
+# 车辆技能升级
+.drive_obj_car_skill_up {
+	car_no 0 : integer               # 车的唯一编号
+	skill_tag 1 : string             # 技能的标签，是啥子技能，车头，车身，车尾
+	old_skill_id 2 : integer         # 旧的 技能id
+	new_skill_id 3 : integer         # 新的 技能id
+}
+
+###################################################################################################### 过程数据 ↑
+
+###############################################################  技能的相关 ↓
+# 通用的 技能触发
+.drive_common_skill_trigger {
+	owner_data 0 : drive_owner_data     # 拥有者 结构
+	trigger_msg 1 : string              # 触发消息的类型
+	skill_data 2 : drive_game_skill_data
+	#trigger_car_no 3 : *integer
+	#receive_car_no 4 : *integer
+
+	trigger_data 5 : *drive_owner_data
+	receive_data 6 : *drive_owner_data
+
+	## pos 7 : integer
+}
+
+# 技能的 创建
+.drive_common_skill_create {
+	owner_data 0 : drive_owner_data     # 拥有者 结构
+
+	skill_data 1 : drive_game_skill_data
+	#pos 2 : integer           # 拥有者的位置，仅限车
+}
+
+# 技能的 死亡
+.drive_common_skill_dead {
+	owner_data 0 : drive_owner_data     # 拥有者 结构
+
+	skill_data 1 : drive_game_skill_data
+} 
+
+# 技能的 修改
+.drive_common_skill_change {
+	owner_data 0 : drive_owner_data     # 拥有者 结构
+
+	#skill_id 1 : integer
+	#change_type 2 : string          # 改变的字段
+	#old_value 3 : string      		# 改变前 的字段的 值
+	#now_value 4 : string            # 改变后 的字段的 值
+	
+	skill_data 5 : drive_game_skill_data   ## 最新的，全部的
+
+	# pos 6 : integer           # 拥有者的位置，仅限车
+} 
+
+# 技能刷新
+
+
+###############################################################  技能的相关 ↑
+
+###############################################################  buff 的相关 ↓
+# buff 的 创建
+.drive_common_buff_create {
+	owner_data 0 : drive_owner_data           # buff拥有者 结构
+	
+	buff_data 1 : drive_game_buff_data
+}
+
+# buff 的 死亡
+.drive_common_buff_dead {
+	owner_data 0 : drive_owner_data           # buff拥有者 结构
+	
+	buff_data 1 : drive_game_buff_data
+} 
+
+# buff 改变
+.drive_common_buff_change {
+	owner_data 0 : drive_owner_data     # 拥有者 结构
+
+	buff_data 1 : drive_game_buff_data
+} 
+
+
+###############################################################  buff 的相关 ↑
+
+###############################################################  tool 的相关 ↓
+
+.drive_tool_create {
+	owner_data 0 : drive_owner_data
+
+	id 1 : integer
+	spend_mp 2 : integer
+	num 3 : integer
+
+}
+
+.drive_tool_use {
+	owner_data 0 : drive_owner_data
+
+	id 1 : integer
+	num 2 : integer
+}
+
+###############################################################  tool 的相关 ↑
+
+# 游戏过程数据
+.driver_game_process_data
+{
+	process_no 0 : integer                # 过程的唯一编号
+	father_process_no 1 : integer         # 导致这个过程的 过程编号
+
+	status_change 2 : driver_game_status_change_data
+	player_op 3 : driver_player_op_data 
+	player_action 4 : driver_player_action_data
+
+	#技能
+	obj_car_move 5 : driver_obj_car_move_data      # 车的移动
+
+	# 车传送
+	obj_car_transfer 6 : driver_obj_car_transfer_data
+
+	# 车 伤害
+	### obj_car_damage 7 : driver_obj_car_damage_data
+
+	# 车修改属性
+	obj_car_modify_property 8 : driver_obj_modify_property
+
+	# 玩家的 属性修改
+	obj_player_modify_property 9 : driver_obj_player_modify_property
+
+	# 车 交换位置
+	obj_car_exchange_pos 10 : driver_obj_car_exchange_pos
+
+	# 道路上的 奖励 数据
+	road_award_change 11 : drive_road_award_data
+
+	# 道路障碍 改变
+	road_barrier_change 12 : drive_road_barrier_data
+
+	# 通用技能触发
+	skill_trigger 13 : drive_common_skill_trigger
+
+	skill_create 14 : drive_common_skill_create
+
+	skill_dead 15 : drive_common_skill_dead
+
+	skill_change 16 : drive_common_skill_change
+
+	# 车辆技能升级
+	obj_car_skill_up 17 : drive_obj_car_skill_up
+
+	# buff 创建
+	buff_create 18 : drive_common_buff_create
+
+	# buff 消失
+	buff_dead 19 : drive_common_buff_dead
+ 	# buff 改变
+	buff_change 20 : drive_common_buff_change
+
+	## 道具创建
+	tool_create 21 : drive_tool_create
+
+	## 道具 使用
+	tool_use 22 : drive_tool_use
+
+}
+
+## 结算数据
+.driver_game_settlement_data {
+	win_seat_num 0 : integer     # 赢家的座位号
+	win_reason 1 : integer       # 1 就是血量减为0, 2 就是圈数跑完 ， 3是投降
+	award 2 : *integer           # 所有玩家的奖励，输的玩家就是负的 
+}
+
+###-------------------------------------------------------------------------------  drive游戏 的 all_data
+.drive_game_all_data {
+	
+	status 0 : string                        # 
+    run_time 1 : integer                     # 从 start_data开始算的 运行时长。
+    op_timeout 2 : integer                   # 操作倒计时
+    start_data 3 : driver_game_end_data
+    process_data 4 : *driver_game_process_data
+    end_data 5 : driver_game_end_data
+
+    settlement_info 6 : driver_game_settlement_data
+
+}
+
+##################################### ------------------------------------------------------------------------------------------------------ 游戏外部相关 ↓
+
+# 车辆的基础数据
+.drive_car_base_info {
+	car_id 0 : integer
+	level 1 : integer
+	star 2 : integer
+
+}
+
+# 装备的基础数据
+.drive_equipment_base_info {
+	no 0 : integer                # 标号，全局唯一的编号 ，当升级 or 升星 or 装备时 ，得发这个过来
+	id 1 : integer                # 类型id , 相同类型id 可能有多个
+	level 2 : integer             # 等级
+	star 3 : integer              # 星级
+	now_exp 4 : integer           # 当前等级的 exp
+	sold_exp 5 : integer          # 用来提升其他装备的经验值 
+	owner_car_id 6 : integer      # 在哪个车上
+	## owner_slot 7 : integer        # 所处的槽位，当在哪个车上才有值 (主要是怕日后槽位改变，所以传过来)
+
+}
+
+
+## 技能的改变
+.drive_game_car_base_skill_vale_data {
+	key 0 : string        # 技能的配置值的key
+	change 1 : integer    # 技能key 值的附加值
+}
+
+## 车的 基础 技能数据
+.drive_game_car_base_skill_data {
+	skill_type 0 : string     #  big 大招，base 基础技能 ，star_1 升一星的技能 ...
+	type_id 1 : integer 
+	skill_values 2 : *drive_game_car_base_skill_vale_data   # 不发改变值，有的值都发过去
+}
+
+
+## 开奖盒子的数据
+.timer_box_data {
+	pos_id 0 : integer          # 位置id
+	box_id 1 : integer          # box id
+	start_time 2 : integer 	    # 开始时间 , 如果没解锁就没的这个数据，
+}
+
+#
+.timer_box_award_data {
+	asset_type 0 : string
+	asset_value 1 : integer
+}
+
+########### common_proto_s2c.sproto #############
+
+#
+# 协议：服务端 => 客户端
+#
+
+#将要被踢出的原因
+will_kick_reason 28 {
+	request {
+		reason 0 : string #  'logout' 玩家注销（心跳超时）；'relogin' 被新的登录挤下线
+	}
+}
+
+#通知资产改变消息
+notify_asset_change_msg 29 {
+	request {
+		no 0 : integer #编号(1-65000循环)
+		change_asset 1 : *player_asset
+		type 2 : string #改变的类型(原因)
+	}
+}
+
+
+#广播消息
+multicast_msg 30 {
+	request {
+		type 0 : integer #--广播类型 1系统广播 2 其他广播
+		format_type 1 : integer #--广播消息格式类型 1 纯文本 其他指定格式
+		content 2 : string #--内容
+	}
+}
+
+# 系统参考变量改变
+on_system_variant_data_change_msg 31 {
+	request {
+		# vip_level 0 : integer	         # vip等级
+		# acount_age 1 : integer	         # 距离首次登录时间的秒数
+		# first_login_time 2 : string	     # 首次登录的时间
+		# pay_sum 3 : string	             # 充值累计(不包含礼包)
+		# max_pay 4 : integer	             # 最大单笔充值(不包含礼包)
+		# tag_vec 5 : *string              # 所有的标签集合
+
+		variant_data 6 : *variant_data
+	}
+}
+# 玩家权限错误
+on_player_permission_error 32 {
+	request {
+		error_desc 0 : string
+	}
+}
+
+## 当新手引导的位置改变
+on_xsyd_pos_change 37 {
+	request {
+		pos 0 : integer
+	}
+}
+
+
+
+
+########### task_proto_s2c.sproto #############
+
+#
+# 协议：服务端 => 客户端
+#
+
+# 任务数据初始化，每次30个
+task_data_init_msg 1105 {
+	request {
+		task_item 0 : *task_item
+	}
+}
+
+# 任务改变
+task_change_msg 1106 {
+	request {
+		task_item 0 : task_item
+	}
+}
+
+# 任务的更新(个数的增加or删除)
+task_item_change_msg 1107 {
+	request {
+		task_item 0 : *task_item_change
+	}
+}
+
+
+########### rank_proto_s2c.sproto #############
+
+#
+# 协议：服务端 => 客户端
+#
+
+##################################################
+
+
+##################################################
+
+
+########### pvp_game_proto_s2c.sproto #############
+
+#
+# 协议：服务端 => 客户端
+#
+
+#玩家加入桌子
+pvp_join_msg 4022 {
+	request {
+		status_no 0 : integer
+		#玩家信息
+		player_info 1 : driver_game_player_info
+	}
+}
+
+#进入房间消息
+pvp_enter_room_msg 4023 {
+	request {
+		status_no 0 : integer
+
+		seat_num 1 : integer
+		players_info 2 : *driver_game_player_info
+		room_info 3 : pvp_room_info
+
+	}
+}
+
+## 自动退出 游戏
+pvp_auto_quit_game 4024 {
+    request {
+        result 0 : integer
+    }
+}
+
+# 游戏结束
+pvp_game_over_msg 4025 {
+	request {
+		status_no 0 : integer
+
+		status 1 : string     # game_over
+
+		
+		
+	}
+}
+
+# pvp 结算消息
+pvp_game_settlement_msg 4044 {
+	request {
+		status_no 0 : integer
+		
+		score 1 : integer                   # 总分数
+		change_score 2 : integer            # 改变--总分数
+		grade 3 : integer                   # 大阶段
+		change_grade 4 : integer            # 改变--大阶段
+		level 5 : integer                   # 小阶段
+		change_level 6 : integer            # 改变--小阶段
+		grade_all_level 7 : integer         # 当前大段位 充满需要的小段位数
+		level_all_score 8 : integer         # 当前小段位 充满需要的分数
+		level_cur_score 9 : integer         # 当前小段位 的当前分数
+		change_level_cur_score 10 : integer  # 当前小段位的分数增量
+
+        up_award 11 : *player_asset # 段位提升奖励
+        win_status 12 : integer     # 连赢/输状态： 1 赢，-1 输， 0 平
+        hold_count 13 : integer     # 连赢/输保持局数
+
+        fight_award 14 : *player_asset # 战斗奖励。注意：如果 asset_type 为  "bao_xiang" , 则 asset_value 表示 宝箱 id
+	}
+}
+
+
+########### drive_game_proto_s2c.sproto #############
+
+#
+# 协议：服务端 => 客户端
+#
+#### -----------------------------------------------------------------------------------------------------------
+#准备
+driver_ready_msg 4007 {
+	request {
+		status_no 0 : integer
+
+		seat_num 1 : integer      # 准备的人的座位号
+	}
+}
+
+#准备 ok
+driver_ready_ok_msg 4008 {
+	request {
+		status_no 0 : integer
+
+		seat_num 1 : integer       # 我的座位号
+	}
+}
+
+## 别人已经告诉服务器 动画时间完了
+drive_finish_movie_by_other 4026 {
+	request {
+
+	}
+}
+
+# 游戏开始
+driver_game_begin_msg 4009 {
+	request {
+		status_no 0 : integer
+	}
+}
+
+# 游戏 game_over
+driver_game_over_msg 4010 {
+	request {
+		status_no 0 : integer
+
+		status 1 : string
+
+	}
+}
+
+# 游戏结算消息
+drive_game_settlement_msg 4013 {
+	request {
+		status_no 0 : integer
+		settlement_info 1 : driver_game_settlement_data
+	}
+}
+
+# 数据 过程 改变 消息
+drive_game_process_data_msg 4011 {
+	request {
+		status_no 0 : integer
+		
+		start_data 1 : driver_game_end_data
+		process_data 2 : *driver_game_process_data
+		end_data 3 : driver_game_end_data
+	}
+}
+
+##################################### ------------------------------------------------------------------------------------------------------ 游戏外部相关 ↓
+# 当车辆的数据改变
+on_drive_car_data_change 4040 {
+	request {
+
+		change_type 0 : string     ## add 或 up_level  或  up_star
+
+		base_data 1 : drive_car_base_info          # 基础数据
+
+        at 2 : integer    ## 最终 攻击力
+        sp 3 : integer    ## 最终 速度
+        hp 4 : integer    ## 最终 血量
+
+        car_skill_data 5 : *drive_game_car_base_skill_data    # 车技能数据
+
+        equipment_data 6 : *drive_equipment_base_info         # 这个车拥有的 装备的数据 ，在哪个槽数据里有
+
+	}
+}
+
+# 当装备的数据改变
+on_drive_equipment_data_change 4041 {
+	request {
+		change_type 0 : string     ## add 或 up_level  或  up_star 或 load 或 unload
+
+		base_data 1 : drive_equipment_base_info
+
+        ## at 2 : integer    ## 附加 攻击力
+        ## sp 3 : integer    ## 附加 速度
+        ## hp 4 : integer    ## 附加 血量
+
+
+
+        skill_data 5 : *drive_game_car_base_skill_data    #  装备 技能数据
+	}
+}
+
+
+###--------------------- 发送所有的 timer_box的改变
+on_timer_box_data_change 4047 {
+	request {
+		box_data 0 : *timer_box_data
+	}
+}
+

@@ -1,0 +1,19 @@
+#
+# 协议：客户端 服务端 共用
+#
+#############################################
+.rank_type_data {
+	rank $ : integer        # 排名
+	player_id $ : string    # 玩家id
+	name $ : string         # 玩家昵称
+	head_image $ : string   # 头像
+	score $ : string 		# 分数
+	other_data $ : string     # 其他数据 
+}
+
+.rank_stage_data {
+	stage_id $ : integer     #阶段id
+	player_num $ : integer   #阶段人数
+}
+
+#############################################

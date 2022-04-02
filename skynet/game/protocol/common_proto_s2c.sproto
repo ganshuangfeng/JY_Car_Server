@@ -1,0 +1,58 @@
+#
+# 协议：服务端 => 客户端
+#
+
+#将要被踢出的原因
+will_kick_reason @ {
+	request {
+		reason $ : string #  'logout' 玩家注销（心跳超时）；'relogin' 被新的登录挤下线
+	}
+}
+
+#通知资产改变消息
+notify_asset_change_msg @ {
+	request {
+		no $ : integer #编号(1-65000循环)
+		change_asset $ : *player_asset
+		type $ : string #改变的类型(原因)
+	}
+}
+
+
+#广播消息
+multicast_msg @ {
+	request {
+		type $ : integer #--广播类型 1系统广播 2 其他广播
+		format_type $ : integer #--广播消息格式类型 1 纯文本 其他指定格式
+		content $ : string #--内容
+	}
+}
+
+# 系统参考变量改变
+on_system_variant_data_change_msg @ {
+	request {
+		# vip_level $ : integer	         # vip等级
+		# acount_age $ : integer	         # 距离首次登录时间的秒数
+		# first_login_time $ : string	     # 首次登录的时间
+		# pay_sum $ : string	             # 充值累计(不包含礼包)
+		# max_pay $ : integer	             # 最大单笔充值(不包含礼包)
+		# tag_vec $ : *string              # 所有的标签集合
+
+		variant_data $ : *variant_data
+	}
+}
+# 玩家权限错误
+on_player_permission_error @ {
+	request {
+		error_desc $ : string
+	}
+}
+
+## 当新手引导的位置改变
+on_xsyd_pos_change @ {
+	request {
+		pos $ : integer
+	}
+}
+
+

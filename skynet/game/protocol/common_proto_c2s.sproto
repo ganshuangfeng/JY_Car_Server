@@ -1,0 +1,372 @@
+#
+# 协议：客户端 => 服务端
+#
+
+# 登录
+login @ {
+	request {
+	    channel_type $:string # 渠道类型： phone, weixin_gz , weixin,youke
+		login_id $ : string # （可选）用户在该渠道的 id ，渠道内唯一；如果缓存第三方授权过期 或首次授权，则 为空
+		password $ : string # （可选）用户密码
+		channel_args $ : string # 渠道的附加参数，通常为 json 字符串
+		introducer $ : string # （可选，创建用户时才需要）介绍人用户 id
+        device_os $: string # （可选）设备的操作系统
+        device_id $: string # （可选）设备的 id
+		market_channel $:string # 推广渠道
+		platform $:string # 平台（不同的账号系统）
+	}
+	response {
+		result $ : integer # 0 succed ,or error id
+		user_id $ : string # 登录成功返回用户 id （系统唯一 id）
+		channel_type $:string # 渠道类型
+		login_id $ : string # 登录id 快速登录使用 客户端应当保存
+		refresh_token $ : string # 登录token 验证使用 客户端应当保存
+		name $ : string 	# 玩家名字
+		head_image $ : string # 玩家头像连接 可能为空串
+		sex $ : integer		# 性别 1男 0女
+		introducer $ : string # 简介
+		location $ : string #当前玩家所在位置
+		vice_location $ : string #当前玩家所在 副 位置
+		game_id $ : integer #当前玩家所在游戏id
+		xsyd_status $ : integer # 0-没有进行过  1-进行过(新手引导)
+		plyj_status $ : integer # 0-没有进行过  1-进行过(评论有奖)
+		million_cup_status $ : million_cup_data #有则显示nil
+		player_ticket $ : *ticket_data #卡券
+		instance_id $ : integer # 服务器运行实例 id，客户端据此判断是否需要重启 走更新流程
+		glory_data $ : glory_data #荣耀数据
+		dressed_head_frame $ : integer 		#当前佩戴的头像框id
+		player_level $ : integer # 用户等级： 0 普通用户，大于等于 1 内部用户（支持 gm_command、允许改服务器地址）
+		step_task_status $ : *integer # 步步生财第一个大步骤的所有小步骤的状态 # 新版红包任务的第一个大步骤的所有小步骤的状态值
+		proto_token $ : string # 协议token
+		last_sczd_profit_num $ : integer         # 上次生财之道的收益值
+		last_logout_time $ : integer             # 上次登出的时间
+		vip_level $ : integer                    # vip等级
+		is_test $ : integer  # 0 正式； 1 测试
+		market_channel $:string # 推广渠道
+		server_name $:string # 服务器名字。 zs 正式； cs 测试
+		register_time $:string #注册时间
+		first_login $ : integer       # 1 首次登录； 0 不是首次登录
+	}
+}
+
+# 得到用于发送短信验证码的 验证图片
+get_vcode_picture @ {
+	request {
+		phone_number $: string # 手机号
+	}
+	response {
+		result $ : integer # 0 succed ,or error id
+		pic_data $ : string # 图片数据
+	}
+}
+
+# 发送短信验证码
+send_sms_vcode @ {
+	request {
+		phone_number $: string # 手机号
+		pic_vcode $ : string # 图片验证码 识别 字符
+	}
+	response {
+		result $ : integer # 0 succed ,or error id
+	}
+}
+
+# GM 命令
+gm_command @ {
+	request {
+		command $: string # 命令字符串
+	}
+	response {
+		result $ : string # 执行结果字符串
+	}
+}
+
+# 上报登录设备信息
+device_info @ {
+	request {
+		device_type $: string # 设备类型 "android"/"ios"
+        device_token $: string # 设备的 id
+	}
+	response {
+		result $ : integer # 0 succed ,or error id
+	}
+}
+
+# 心跳
+heartbeat @ {
+	request {
+	}
+	response {
+	}
+}
+
+#客户端状态
+change_clientStatus @ {
+	request {
+		status $ : integer # 1 切换到后台 , 0 切换到正常（从后台切换回来）
+	}
+	response {
+		result $ : integer
+	}
+}
+
+#请求玩家所在位置
+get_location @ {
+	request {
+	}
+	response {
+		result $ : integer
+		location $ : string
+	}
+}
+
+#请求玩家所在 副位置
+get_vice_location @ {
+	request {
+	}
+	response {
+		result $ : integer
+		location $ : string
+	}
+}
+
+client_breakdown_info @ {
+	request {
+		error $ : string
+    }
+}
+
+#请求玩家财物
+query_asset @ {
+	request {
+		index $ : integer
+	}
+	response {
+		result $ : integer
+		no $ : integer
+		player_asset $ : *player_asset
+	}
+}
+
+#查询实名认证
+query_real_name_authentication @ {
+	request {
+	}
+	response {
+		result $ : integer
+		status $ : integer # 0-未认证 1-已认证
+	}
+}
+
+#进行实名认证
+proceed_real_name_authentication @ {
+	request {
+		name $ : string
+		identity_number $ : string
+	}
+	response {
+		result $ : integer
+	}
+}
+#创建订单
+create_pay_order @ {
+	request {
+	 	goods_id $ : integer # 商品id
+	 	channel_type $ : string # weixin,alipay
+	 	geturl $ : string # y/n 是否获取 url
+		convert $ : string #要转换的资产类型
+	}
+	response {
+		result $ : integer
+		order_id $ : string
+		url $ : string # 如果 geturl 为 true 则返回 url
+	}
+}
+
+
+#退出游戏 -- 切换账号
+player_quit @ {
+	request {
+	}
+	response {
+		result $ : integer
+	}
+}
+
+# 得到分享 字符串
+get_share_url @ {
+	request {
+		share_source $ : string   # 来源 qysfx_3
+		category $ : integer   # 分类 1默认 2新人组队挑战活动
+	}
+	response {
+		result $ : integer
+		share_url $ : string
+	}
+}
+
+# 查询绑定手机号码信息
+query_bind_phone @ {
+	request {
+	}
+	response {
+		result $ : integer
+		phone_no $ : string  # 手机号码
+		cd $ : integer
+	}
+}
+
+
+# 发送绑定手机短信验证码
+send_bind_phone_verify_code @ {
+	request {
+		phone_no $ : string  # 手机号码
+	}
+	response {
+		result $ : integer
+		cd $ : integer
+	}
+}
+
+# 验证绑定手机验证码
+verify_bind_phone_code @ {
+	request {
+		code $ : string # 手机验证码
+	}
+	response {
+		result $ : integer
+	}
+}
+# 请求获取 系统参考变量
+query_system_variant_data @ {
+	request {
+	}
+	response {
+		result $ : integer
+		# vip_level $ : integer	         # vip等级
+		# acount_age $ : integer	         # 距离首次登录时间的秒数
+		# first_login_time $ : string	     # 首次登录的时间
+		# pay_sum $ : string	             # 充值累计(不包含礼包)
+		# max_pay $ : integer	             # 最大单笔充值(不包含礼包)
+		# tag_vec $ : *string              # 所有的标签集合
+
+		variant_data $ : *variant_data
+	}
+}
+
+# 埋点统计
+data_statistics @ {
+	request {
+		type $ : string
+		content $ : string
+	}
+	response {
+		result $ : integer
+	}
+}
+
+
+###### xxxx ↓
+#设置头像
+set_head_image @ {
+	request {
+		img_type $ : integer # 头像类型
+	}
+	response {
+		result $ : integer
+		img_type $ : integer    # 头像类型id
+	}
+}
+
+#修改昵称
+update_player_name @ {
+	request {
+		name $ : string # 新昵称
+	}
+	response {
+		result $ : integer
+		name $ : string # 新昵称
+	}
+}
+
+
+#邀请码注册
+register_by_introducer @ {
+	request {
+		parent_id $ : string # 推荐人id
+	}
+	response {
+		result $ : integer
+		parent_id $ : string # 推荐人id
+	}
+}
+
+###### xxx ↑
+
+
+
+# 开启agent游戏模块
+open_game_module @ {
+	request {
+		name $ : string # 模块名
+	}
+	response {
+		result $ : integer
+	}
+}
+
+
+# 请求假数据
+query_fake_data @ {
+	request {
+		data_type $ : string              # 假数据的类型
+	}
+	response {
+		result $ : integer                # 0 成功
+		player_name $ : string            # 玩家名
+		award_data $ : integer            # 奖励数据
+
+	}
+}
+
+# 请求超级彩金池假数据
+query_super_money_fake_data @ {
+	request {
+	}
+	response {
+		result $ : integer          # 0 成功
+		super_money $ : integer  	#假数据
+	}
+}
+
+
+# 防沉迷系统数据
+query_indulge_data @ {
+	request {
+	}
+	response {
+		result $ : integer          # 0 成功
+		login_time $ : string       # 登录时间点
+		accumulate_time $ : string       # 累积时长
+	}
+}
+
+#  设置新手引导的位置
+set_xsyd_pos @ {
+	request {
+		pos $ : integer
+	}
+	response {
+		result $ : integer          # 0 成功
+	}
+}
+
+# 获取新手引导的位置
+get_xsyd_pos @ {
+	request {
+	}
+	response {
+		result $ : integer          # 0 成功
+		pos $ : integer
+	}
+}

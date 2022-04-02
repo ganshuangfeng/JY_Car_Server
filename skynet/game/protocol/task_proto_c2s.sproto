@@ -1,0 +1,48 @@
+#
+# 协议：客户端 => 服务端
+#
+
+#请求所有的任务数据
+query_task_data @ {
+	request {
+	}
+	response {
+		result $ : integer
+	}
+}
+
+query_one_task_data @ {
+	request {
+		task_id $ : integer           # 任务id,不传获取全部
+	}
+	response {
+		result $ : integer
+		task_data $ : task_item
+	}
+}
+
+#请求某个任务的奖励
+get_task_award @ {
+	request {
+		id $ : integer 
+	}
+	response {
+		result $ : integer
+		id $ : integer 
+		award_list $ : *award_data2
+	}
+}
+
+#请求某个任务的奖励  new
+get_task_award_new @ {
+	request {
+		id $ : integer 
+		award_progress_lv $ : integer 
+	}
+	response {
+		result $ : integer
+		id $ : integer 
+		award_list $ : *award_data2
+	}
+}
+

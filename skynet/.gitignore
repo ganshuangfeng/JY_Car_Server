@@ -1,0 +1,8 @@
+/skynet.pid
+*.dSYM
+.DS_Store
+*.swp
+*.swo
+*.un~
+xxl_shuihu_xc_map.lua
+pengpengle_data.lua

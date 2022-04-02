@@ -1,0 +1,24 @@
+#
+# 协议：服务端 => 客户端
+#
+
+# 任务数据初始化，每次30个
+task_data_init_msg @ {
+	request {
+		task_item $ : *task_item
+	}
+}
+
+# 任务改变
+task_change_msg @ {
+	request {
+		task_item $ : task_item
+	}
+}
+
+# 任务的更新(个数的增加or删除)
+task_item_change_msg @ {
+	request {
+		task_item $ : *task_item_change
+	}
+}

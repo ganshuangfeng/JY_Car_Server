@@ -1,0 +1,55 @@
+#
+# 协议：客户端 => 服务端
+#
+###################################################################### 通用
+# 排行榜 获取基本信息
+query_rank_base_info @ {
+	request {
+		rank_type $ : string				   # 排行榜类型
+	}
+	response {
+		result $ : integer                     # 0 成功
+		rank_type $ : string				   # 排行榜类型
+		score $ : string           		       # 我的分数
+		rank $ : integer                       # 排名 ， -1表示未上榜
+		other_data $ : string                  # 其他数据 
+	}
+}
+
+#排行榜 请求排名
+query_rank_data @ {
+	request {
+		page_index $ : integer                 # 查询第几页的数据
+		rank_type $ : string				   # 排行榜类型
+	}
+	response {
+		result $ : integer                     # 0 成功
+		page_index $ : integer                 # 查询第几页的数据
+		rank_type $ : string				   # 排行榜类型
+		rank_data $ : *rank_type_data    	   # 返回rank_type排行数据
+	}
+}
+#####################################################################
+
+##################################################################### 周年庆赢金争霸赛排行榜
+query_znq_yingjing_rank_stage_data @ {
+	request {
+	}
+	response {
+		result $ : integer                     # 0 成功
+		stage_data $ : *rank_stage_data    	   # 返回排行阶段数据
+	}
+}
+
+query_znq_yingjing_rank_stage_details @ {
+	request {
+		stage_id $ : integer           # 阶段id
+		page_index $ : integer         # 页码
+	}
+	response {
+		result $ : integer                     # 0 成功
+		rank_data $ : *rank_type_data    	   # 返回rank_type排行数据
+	}
+}
+
+#####################################################################

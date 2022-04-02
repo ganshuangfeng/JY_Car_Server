@@ -1,0 +1,35 @@
+------------- 清理服务器项目:
+*.player_agent里面清干净，广播协议保留
+*.启动项里面的configs 无关的清掉，services 无关的清掉
+*.game/protocol 协议无关的清掉
+*.任务系统保留 game/common/task/common_task.lua;game/common/task/init.lua;game/common/task/task_base_func.lua;game/common/task/task_msg_center.lua
+*.资产系统，保留，player_info中的部分，agent中的asset_manage
+*.保留:
+	act_permission_center_service
+	dmin_consonle_service
+	client_bug_log_service
+	collect_service
+	data_service , 按功能保留
+	debug_console_service
+	gate_service
+	login_service
+	monitor_service
+	msg_notification_center_service
+	pay_service
+	player_agent  ,按功能保留
+	rank_center_service
+	reload_center
+	tag_center
+	task_center_service
+	third_agent_service
+	verify_service
+	websever_service
+	center_service.lua
+	node_service.lua
+	protoloader.lua
+	sql_id_center.lua
+	webclient_service.lua
+	write_logfile_service.lua
+
+*.删掉：
+	没在保留的，判断一下，删掉

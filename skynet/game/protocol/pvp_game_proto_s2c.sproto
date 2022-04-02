@@ -1,0 +1,67 @@
+#
+# 协议：服务端 => 客户端
+#
+
+#玩家加入桌子
+pvp_join_msg @ {
+	request {
+		status_no $ : integer
+		#玩家信息
+		player_info $ : driver_game_player_info
+	}
+}
+
+#进入房间消息
+pvp_enter_room_msg @ {
+	request {
+		status_no $ : integer
+
+		seat_num $ : integer
+		players_info $ : *driver_game_player_info
+		room_info $ : pvp_room_info
+
+	}
+}
+
+## 自动退出 游戏
+pvp_auto_quit_game @ {
+    request {
+        result $ : integer
+    }
+}
+
+# 游戏结束
+pvp_game_over_msg @ {
+	request {
+		status_no $ : integer
+
+		status $ : string     # game_over
+
+		
+		
+	}
+}
+
+# pvp 结算消息
+pvp_game_settlement_msg @ {
+	request {
+		status_no $ : integer
+		
+		score $ : integer                   # 总分数
+		change_score $ : integer            # 改变--总分数
+		grade $ : integer                   # 大阶段
+		change_grade $ : integer            # 改变--大阶段
+		level $ : integer                   # 小阶段
+		change_level $ : integer            # 改变--小阶段
+		grade_all_level $ : integer         # 当前大段位 充满需要的小段位数
+		level_all_score $ : integer         # 当前小段位 充满需要的分数
+		level_cur_score $ : integer         # 当前小段位 的当前分数
+		change_level_cur_score $ : integer  # 当前小段位的分数增量
+
+        up_award $ : *player_asset # 段位提升奖励
+        win_status $ : integer     # 连赢/输状态： 1 赢，-1 输， 0 平
+        hold_count $ : integer     # 连赢/输保持局数
+
+        fight_award $ : *player_asset # 战斗奖励。注意：如果 asset_type 为  "bao_xiang" , 则 asset_value 表示 宝箱 id
+	}
+}

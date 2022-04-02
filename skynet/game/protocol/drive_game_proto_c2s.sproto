@@ -1,0 +1,229 @@
+
+# 协议：游戏 客户端 => 服务端
+#
+
+
+#### -----------------------------------------------------------------------------------------------------------
+
+# 玩家通用请求操作 
+drive_game_player_op_req @ {
+	request {
+		op_type $ : integer          # 操作类型 1 玩家普通操作 ，2 大油门(基础)  ，3 小油门(基础) ，4 是选择索引(基础) ，5是选择道路，6是选择技能
+		op_arg_1 $ : integer         # 操作参数  操作类型为5 时传的是 道路id , 类型为6 时传的是 技能id , 类型为7 时传的是 道具id;类型为8 时传的是 1是立刻使用，2是稍后使用
+    }
+    response {
+    	result $ : integer 
+        op_type $ : integer   
+        op_arg_1 $ : integer  
+    }
+}
+
+## 结束 动画表现
+drive_finish_movie @ {
+	request {
+		
+    }
+    response {
+    	result $ : integer 
+    }
+}
+
+## 设置 动画播放 时长
+drive_set_movie_time @ {
+    request {
+        time $ : integer    
+    }
+    response {
+        result $ : integer 
+    }
+}
+
+
+##################################### ------------------------------------------------------------------------------------------------------ 游戏外部相关 ↓
+
+## 请求拥有的车 , 显示在车辆升级面板下面的所有车的  信息
+query_drive_all_car_data @ {
+    request {
+        
+    }
+    response {
+        result $ : integer 
+
+        base_data $ : *drive_car_base_info   # 基础数据
+    }
+}
+
+## 请求 车升级界面 车的最终数据
+query_drive_car_data @ {
+    request {
+        car_id $ : integer
+    }
+    response {
+        result $ : integer 
+        
+        base_data $ : drive_car_base_info   # 基础数据
+
+        at $ : integer    ## 最终 攻击力
+        sp $ : integer    ## 最终 速度
+        hp $ : integer    ## 最终 血量
+
+        car_skill_data $ : *drive_game_car_base_skill_data    # 车技能数据 , 只发升级带来的技能 ，只发有的，起作用的技能，没有达到星级的不发
+
+        equipment_data $ : *drive_equipment_base_info         # 这个车拥有的 装备的数据 ，在哪个槽数据里有
+    }
+}
+
+
+## 车升级
+drive_car_up_level @ {
+    request {
+        car_id $ : integer
+    }
+    response {
+        result $ : integer 
+
+        ## 改变用 推送发过来
+
+    }
+}
+
+## 车升星
+drive_car_up_star @ {
+    request {
+        car_id $ : integer
+    }
+    response {
+        result $ : integer 
+
+        ## 改变用 推送发过来
+
+    }
+}
+
+
+###########---------------------------------------------------------------- 装备 ↓
+
+## 请求所有的 装备数据
+query_drive_all_equipment @ {
+    request {
+        
+    }
+    response {
+        result $ : integer 
+
+        base_data $ : *drive_equipment_base_info  # 基础数据
+    }
+}
+
+## 请求一个 装备的详细 信息
+query_drive_equipment_data @ {
+    request {
+        no $ : integer           # 装备编号
+    }
+    response {
+        result $ : integer 
+
+        base_data $ : drive_equipment_base_info
+
+        ## at $ : integer    ## 附加 攻击力
+        ## sp $ : integer    ## 附加 速度
+        ## hp $ : integer    ## 附加 血量
+
+        skill_data $ : *drive_game_car_base_skill_data    #  装备 技能数据
+    }
+}
+
+
+## 装备升级 ，提升
+drive_equipment_up_level @ {
+    request {
+        no $ : integer           # 装备编号
+        spend_no $ : *integer    # 消耗的装备的编号
+    }
+    response {
+        result $ : integer 
+        spend_no $ : *integer    # 消耗的装备的编号
+        ## 改变用 推送发过来
+
+    }
+}
+
+## 装备升星
+drive_equipment_up_star @ {
+    request {
+        no $ : integer           # 装备编号
+    }
+    response {
+        result $ : integer 
+
+        ## 改变用 推送发过来
+
+    }
+}
+
+## 装备 佩戴
+drive_equipment_load @ {
+     request {
+        no $ : integer           # 装备编号
+        car_id $ : integer       # 车辆id
+    }
+    response {
+        result $ : integer 
+
+        ## 改变用 推送发过来
+
+        base_data $ : drive_equipment_base_info  # 基础数据
+    }
+}
+
+## 装备 卸下
+drive_equipment_unload @ {
+    request {
+        no $ : integer           # 装备编号
+    }
+    response {
+        result $ : integer 
+
+        ## 改变用 推送发过来
+
+        base_data $ : drive_equipment_base_info  # 基础数据
+    }
+}
+
+### --------------------------------------- timer box 
+## 请求所有的 奖励盒子
+query_player_timer_box_data @ {
+    request {
+       
+    }
+    response {
+        result $ : integer 
+
+        box_data $ : *timer_box_data
+    }
+}
+
+# 请求解锁 ，(开始倒计时) ， 普通解锁
+unlock_timer_box_by_time @ {
+    request {
+       pos_id $ : integer         # 位置id
+    }
+    response {
+        result $ : integer 
+
+    }
+}
+
+
+## 获得 奖励 , 一种是时间到了获奖，一种是花钻石得奖
+get_award_timer_box @ {
+    request {
+       pos_id $ : integer               # 位置id
+       is_spend_diamond $ : integer     # 1 表示使用钻石得奖
+    }
+    response {
+        result $ : integer 
+
+        award_list $ : *timer_box_award_data
+    }
+}

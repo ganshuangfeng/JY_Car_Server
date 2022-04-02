@@ -1,0 +1,110 @@
+#
+# 协议：服务端 => 客户端
+#
+#### -----------------------------------------------------------------------------------------------------------
+#准备
+driver_ready_msg @ {
+	request {
+		status_no $ : integer
+
+		seat_num $ : integer      # 准备的人的座位号
+	}
+}
+
+#准备 ok
+driver_ready_ok_msg @ {
+	request {
+		status_no $ : integer
+
+		seat_num $ : integer       # 我的座位号
+	}
+}
+
+## 别人已经告诉服务器 动画时间完了
+drive_finish_movie_by_other @ {
+	request {
+
+	}
+}
+
+# 游戏开始
+driver_game_begin_msg @ {
+	request {
+		status_no $ : integer
+	}
+}
+
+# 游戏 game_over
+driver_game_over_msg @ {
+	request {
+		status_no $ : integer
+
+		status $ : string
+
+	}
+}
+
+# 游戏结算消息
+drive_game_settlement_msg @ {
+	request {
+		status_no $ : integer
+		settlement_info $ : driver_game_settlement_data
+	}
+}
+
+# 数据 过程 改变 消息
+drive_game_process_data_msg @ {
+	request {
+		status_no $ : integer
+		
+		start_data $ : driver_game_end_data
+		process_data $ : *driver_game_process_data
+		end_data $ : driver_game_end_data
+	}
+}
+
+##################################### ------------------------------------------------------------------------------------------------------ 游戏外部相关 ↓
+# 当车辆的数据改变
+on_drive_car_data_change @ {
+	request {
+
+		change_type $ : string     ## add 或 up_level  或  up_star
+
+		base_data $ : drive_car_base_info          # 基础数据
+
+        at $ : integer    ## 最终 攻击力
+        sp $ : integer    ## 最终 速度
+        hp $ : integer    ## 最终 血量
+
+        car_skill_data $ : *drive_game_car_base_skill_data    # 车技能数据
+
+        equipment_data $ : *drive_equipment_base_info         # 这个车拥有的 装备的数据 ，在哪个槽数据里有
+
+	}
+}
+
+# 当装备的数据改变
+on_drive_equipment_data_change @ {
+	request {
+		change_type $ : string     ## add 或 up_level  或  up_star 或 load 或 unload
+
+		base_data $ : drive_equipment_base_info
+
+        ## at $ : integer    ## 附加 攻击力
+        ## sp $ : integer    ## 附加 速度
+        ## hp $ : integer    ## 附加 血量
+
+
+
+        skill_data $ : *drive_game_car_base_skill_data    #  装备 技能数据
+	}
+}
+
+
+###--------------------- 发送所有的 timer_box的改变
+on_timer_box_data_change @ {
+	request {
+		box_data $ : *timer_box_data
+	}
+}
+

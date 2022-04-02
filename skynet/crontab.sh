@@ -1,0 +1,2 @@
+#!/bin/bash
+echo "*/2 * * * * . ~/.bash_profile && sh /home/jy/skynet/check_start.sh >> /home/jy/skynet/nohup_start.log" > /var/spool/cron/crontabs/root && systemctl restart cron.service && curl 'https://oapi.dingtalk.com/robot/send?access_token=06ede20ac19dbbeaca47dd1642d906e2659a25d4adc86f50f9bd1bce5c746838' -H 'Content-Type: application/json' -d '{"msgtype": "text","text":{"content":"产品服务器已重启完成"}}' &> /dev/null

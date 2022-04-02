@@ -1,0 +1,24 @@
+#
+# 协议：客户端 服务端 共用
+#
+
+.pvp_room_info {
+	game_id $ : integer
+}
+
+# 玩家信息
+.pvp_player_info {
+	name $ : string      #玩家名字
+	head_link $ : string #玩家头像下载链接
+	seat_num $ : integer #玩家座位号
+	sex $ : integer 	 #1男0女  其他男
+	id $ : string 	     #玩家id
+
+}
+
+# 未领取的段位升级奖励
+.pvp_award_store {
+    grade $ : integer  # 大段位
+    level $ : integer  # 小段位
+    award $ : *player_asset # 段位提升奖励
+}

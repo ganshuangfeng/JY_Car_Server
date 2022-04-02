@@ -1,0 +1,95 @@
+
+# 协议：游戏 客户端 => 服务端
+
+
+
+
+
+# 报名
+pvp_signup @ {
+	request {
+		id $ : integer
+        car_id $ : integer
+	}
+	response {
+		result $ : integer
+		game_id $ : integer
+        map_id $ : integer
+
+	}
+}
+
+## 退出游戏
+pvp_quit_game @ {
+    request {
+    }
+    response {
+        result $ : integer
+    }
+}
+
+## 投降
+pvp_surrender_game @ {
+    request {
+    }
+    response {
+        result $ : integer
+    }
+}
+
+# PvP 游戏
+pvp_all_info_req @ {
+    request {
+    }
+    response {
+        result $ : integer
+        status_no $ : integer
+        status $ : string            # 报名后 wait_table (等匹配), 匹配上 wait_ready (等准备), 准备完毕 gaming , 游戏结束 game_over
+        game_type $ : string
+        room_info $ : pvp_room_info
+        players_info  $ : *pvp_player_info
+
+        ## 游戏数据
+        nor_drive_game_info $ : drive_game_all_data
+    }
+}
+
+
+# 游戏结束
+pvp_duanwei_get_data @ {
+    request {
+    }
+	response {
+        result $ : integer
+		score $ : integer  # 积分
+		grade $ : integer  # 大段位
+		level $ : integer  # 小段位
+
+        grade_all_level $ : integer  # 当前大段位 充满需要的小段位数
+        level_all_score $ : integer  # 当前小段位 充满需要的分数
+        level_cur_score $ : integer  # 当前小段位 的当前分数
+	}
+}
+
+# 得到未领取的段位升级奖励
+pvp_duanwei_get_award_list @ {
+    request {
+    }
+	response {
+        result $ : integer
+        award $ : *pvp_award_store # 段位提升奖励
+	}
+}
+
+# 领取的段位升级奖励
+pvp_duanwei_take_award @ {
+    request {
+		grade $ : integer  # 大段位
+		level $ : integer  # 小段位
+        asset_type $ : string #-- 资产类型（可选）
+    }
+	response {
+        result $ : integer
+        award $ : *player_asset # 本次领取成功的奖励
+	}
+}

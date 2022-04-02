@@ -1,0 +1,35 @@
+root = "./"
+luaservice = root.."service/?.lua;"..root.."game/?.lua;"..root.."game/services/?.lua;"..root.."game/activity_service/?.lua;"..root.."game/launch/?.lua;"
+lualoader = root .. "lualib/loader.lua"
+lua_path = root.."lualib/?.lua;"..root.."game/?.lua;"..root.."lualib/?/init.lua;"..root.."game/services/?.lua;"..root.."game/activity_service/?.lua;"..root.."game/common/?.lua;"..root.."game/config/?.lua;"..root.."?.lua;"
+lua_cpath = root .. "luaclib/?.so"
+snax = root.."game/service/?.lua;"
+
+game_config_dir = "./game/config/"
+
+harbor = 0
+
+launch_config=get_config_name()
+thread = 8
+logger = nil
+logpath = "."
+
+profile = true
+
+bootstrap = "snlua bootstrap"	-- The service for bootstrap
+cpath = root.."cservice/?.so"
+
+dumpath = "./logs"
+
+
+skynet_system_id_0 = "xvfDpGreJa3oYtGTZTXJZ5rzfRxWBf3CuDrwBWeyWjs="
+skynet_system_id_1 = "xvfDpGreJa3oYtGTZTXJZyAM4mn2otLd6bSro2IfXrI="
+skynet_system_id_2 = "DbhKs6nZtnQNEIbvPh2V9qZlU3bW+K0fjXtP8BItkpY="
+skynet_system_id_3 = "ghXCUnKt/n/w42Izh7+vuoHUhB3NAaM/5IlBYcsDsHc="
+skynet_system_id_4 = "FRVPJ5bW/qZ821Ix3vM5d8mEhl/ya6CbqNQjmyms6lM="
+skynet_system_id_5 = "qAsKi6/mG/TtfeFZWIfgFfGlFV7pZdAfltLQxJtKxlc="
+skynet_system_id_6 = "4+0j53yTIW68I4p+R3e+HtF93wrmyZ/e+yyzsw5EFfA="
+skynet_system_id_7 = ""
+skynet_system_id_8 = ""
+skynet_system_id_9 = ""
+

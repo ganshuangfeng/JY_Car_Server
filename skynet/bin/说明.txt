@@ -1,0 +1,10 @@
+
+由于各人的 ubuntu 版本不同，需要
+
+1、查看 ubuntu 版本命令：
+	
+	lsb_release -a
+	
+	
+2、拷贝相应版本的 文件到 skynet 文件夹！
+   例外：ubuntu 20 可以使用 18 版本的

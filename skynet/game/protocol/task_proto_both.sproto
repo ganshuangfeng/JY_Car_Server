@@ -1,0 +1,53 @@
+#
+# 协议：客户端 服务端 共用
+#
+
+.award_data {
+	asset_type $ : string
+	asset_value $ : integer
+}
+
+.award_data2 {
+	asset_type $ : string
+	asset_value $ : integer
+	award_name $ : string
+}
+
+.fix_award_data {
+	award_data $ : *award_data
+}
+
+.task_item {
+	id $ : integer
+	now_total_process $ : string    # 当前总进度
+	now_lv $ : integer               # 当前等级
+	now_process $ : string          # 当前等级总进度
+	need_process $ : string         # 当前等级需要的总进度
+	task_round $ : integer           # 应该领取的奖励档位
+	task_type $ : string             # 任务类型
+	task_condition_type $ : string   # 任务的条件类型(按什么条件来加进度)
+
+	# 0-不能领取 | 1-可领取 | 2-已完成 | 3- 未启用
+	award_status $ : integer
+
+	create_time $ : string            # 创建时间
+	over_time $ : string            # 过期时间
+
+	start_valid_time $ : string          # 开始的有效时间
+	end_valid_time $ : string            # 结束的有效时间
+
+	# 奖励领取的状态
+	award_get_status $ : string
+
+	fix_award_data $ : *fix_award_data    #固定奖励类型
+
+	other_data_str $ : string             # 其他数据的string表示
+
+}
+
+.task_item_change {
+	task_id $ : integer              # 任务id
+	task_type $ : string             # 任务类型
+	change_type $ : string           # 改变类型 , add 新增 delete 删除
+}
+

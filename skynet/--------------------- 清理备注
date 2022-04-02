@@ -1,0 +1,14 @@
+--------------------- 清理备注
+------ 需要保留的数据库表:
+
+system_watch
+player_info
+player_login
+player_login_log
+player_login_stat
+player_register
+
+----------------- 保留配置表
+gm_user_list
+test_user_list
+
